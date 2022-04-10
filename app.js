@@ -16,6 +16,7 @@ let PorcRecuperado=[];
 let BeneficioAcumulado=[];
 let mesAño=[];
 let Principal=[];
+let InversionAcum=[];
 
 calcular.onclick = Calculo;
 
@@ -48,6 +49,7 @@ function CrearReporte(genera_tabla){
         InvVencidasMes.push(Principal[index].InversionesVencidas);
         PorcRecuperado.push(0);
         BeneficioAcumulado.push(0);
+        InversionAcum.push(0);
         
         //console.log(Principal[index].MesAno + " primera " + index);
        } else {
@@ -70,15 +72,19 @@ function CrearReporte(genera_tabla){
         if (index==0){
             PorcRecuperado[index]=(BeneficioMes[index])/parseFloat(IntComp[1][1]);
             BeneficioAcumulado[index]=(BeneficioMes[index]);
-    
+            InversionAcum[index]=InversionMes[indice];
         }else{
             PorcRecuperado[index]=(BeneficioMes[index])/parseFloat(IntComp[1][1])+PorcRecuperado[index-1];
             BeneficioAcumulado[index]=(BeneficioMes[index])+BeneficioAcumulado[index-1];
+            InversionAcum[index]=(InversionMes[indice])+InversionAcum[index-1];
         }
      }
      if (BeneficioMes[index]==0 & index>0){
         PorcRecuperado[index]=PorcRecuperado[index-1];
         BeneficioAcumulado[index]=BeneficioAcumulado[index-1];
+     }
+     if (InversionMes[index]==0 & index>0){
+        InversionAcum[index]=InversionAcum[index-1];
      }
 
     }
@@ -185,12 +191,12 @@ function genera_tabla(){
     for(let index in mesAño){
         let cuenta= parseInt(index)+1
        console.log(mesAño[index]);
-       addRow("table",mesAño[index],InversionMes[index],BeneficioMes[index],InvVencidasMes[index],cuenta,PorcRecuperado[index],BeneficioAcumulado[index]);
+       addRow("table",mesAño[index],InversionMes[index],BeneficioMes[index],InvVencidasMes[index],cuenta,PorcRecuperado[index],BeneficioAcumulado[index],InversionAcum[index]);
     }
   
 }
 
-function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecuperado,BeneficioAcumulad) {
+function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecuperado,BeneficioAcumulad,InversionAcuml) {
     
     var number = inversiones;
     var myNumeral = numeral (number);
@@ -213,6 +219,10 @@ function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecu
     var myNumeral4 = numeral (number4);
     var BeneficioAcumuladString = myNumeral4.format('$0,0.00');
 
+    var number5 = InversionAcuml;
+    var myNumeral5 = numeral (number4);
+    var InversionAcumlString = myNumeral5.format('$0,0.00');
+
     // Obtiene una referencia a la tabla
     var tableRef = document.getElementById(tableID);
     //var tbody = document.getElementById("tbody");
@@ -222,23 +232,27 @@ function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecu
     // Inserta una celda en la fila, en el índice 0
 
     var newCellmes  = newRow.insertCell(0);
-    var newCellInver  = newRow.insertCell(1);
+    var newCellInverAcuml  = newRow.insertCell(1);
+    //var newCellInver  = newRow.insertCell(1);
     //var newCellBeneficio  = newRow.insertCell(2);
     //var newCellInverVenc  = newRow.insertCell(3);
     var newCellPorc  = newRow.insertCell(2);
     var newCellBenefAcum  = newRow.insertCell(3);
+   
     
     
   
     // Añade un nodo de texto a la celda
     var newTextmes  = document.createTextNode(mes);
-    var newTextInver  = document.createTextNode(InverString);
+    //var newTextInver  = document.createTextNode(InverString);
+    var newTextInverAcuml  = document.createTextNode(InversionAcumlString);
     //var newTextBeneficio  = document.createTextNode(BeneficioString);
     //var newTextInverVenc  = document.createTextNode(InverVencString);
     var newTextPorc  = document.createTextNode(PorcString);
     var newTextBenefAcum  = document.createTextNode(BeneficioAcumuladString);
     newCellmes.appendChild(newTextmes);
-    newCellInver.appendChild(newTextInver);
+    //newCellInver.appendChild(newTextInver);
+    newCellInverAcuml.appendChild(newTextInverAcuml);
     //newCellBeneficio.appendChild(newTextBeneficio);
     //newCellInverVenc.appendChild(newTextInverVenc);
     newCellPorc.appendChild(newTextPorc);
