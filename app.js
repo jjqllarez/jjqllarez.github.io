@@ -223,24 +223,24 @@ function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecu
 
     var newCellmes  = newRow.insertCell(0);
     var newCellInver  = newRow.insertCell(1);
-    var newCellBeneficio  = newRow.insertCell(2);
-    var newCellInverVenc  = newRow.insertCell(3);
-    var newCellPorc  = newRow.insertCell(4);
-    var newCellBenefAcum  = newRow.insertCell(5);
+    //var newCellBeneficio  = newRow.insertCell(2);
+    //var newCellInverVenc  = newRow.insertCell(3);
+    var newCellPorc  = newRow.insertCell(2);
+    var newCellBenefAcum  = newRow.insertCell(3);
     
     
   
     // Añade un nodo de texto a la celda
     var newTextmes  = document.createTextNode(mes);
     var newTextInver  = document.createTextNode(InverString);
-    var newTextBeneficio  = document.createTextNode(BeneficioString);
-    var newTextInverVenc  = document.createTextNode(InverVencString);
+    //var newTextBeneficio  = document.createTextNode(BeneficioString);
+    //var newTextInverVenc  = document.createTextNode(InverVencString);
     var newTextPorc  = document.createTextNode(PorcString);
     var newTextBenefAcum  = document.createTextNode(BeneficioAcumuladString);
     newCellmes.appendChild(newTextmes);
     newCellInver.appendChild(newTextInver);
-    newCellBeneficio.appendChild(newTextBeneficio);
-    newCellInverVenc.appendChild(newTextInverVenc);
+    //newCellBeneficio.appendChild(newTextBeneficio);
+    //newCellInverVenc.appendChild(newTextInverVenc);
     newCellPorc.appendChild(newTextPorc);
     newCellBenefAcum.appendChild(newTextBenefAcum);
   }
