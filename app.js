@@ -30,6 +30,7 @@ function Calculo(){
     mesAño=[];
     PorcRecuperado=[];
     BeneficioAcumulado=[];
+    InversionAcum=[];
     eliminar_tabla()
     const cadenaFecha = document.querySelector("#FechaDeposito").value;
     let MontoInicial = document.getElementById("MontoInicial").value;
@@ -42,6 +43,7 @@ function Calculo(){
 function CrearReporte(genera_tabla){
     for(let index in Principal){
         let indice=0;
+    
        if (mesAño.indexOf(Principal[index].MesAno)==-1){
         mesAño.push(Principal[index].MesAno);
         InversionMes.push(Principal[index].Inversion);
@@ -49,9 +51,7 @@ function CrearReporte(genera_tabla){
         InvVencidasMes.push(Principal[index].InversionesVencidas);
         PorcRecuperado.push(0);
         BeneficioAcumulado.push(0);
-        InversionAcum.push(0);
-        
-        //console.log(Principal[index].MesAno + " primera " + index);
+       
        } else {
         indice=mesAño.indexOf(Principal[index].MesAno);
         let r=InversionMes[indice];
@@ -61,7 +61,6 @@ function CrearReporte(genera_tabla){
         InversionMes[indice]=r+parseFloat(Principal[index].Inversion);
         BeneficioMes[indice]=r1+parseFloat(Principal[index].Beneficio);
         InvVencidasMes[indice]=r2+parseFloat(Principal[index].InversionesVencidas);
-        //console.log(Principal[index].MesAno + " segunda " + index + " indice:" + indice + " inversion:" + r);
        }
     }
    
@@ -72,35 +71,26 @@ function CrearReporte(genera_tabla){
         if (index==0){
             PorcRecuperado[index]=(BeneficioMes[index])/parseFloat(IntComp[1][1]);
             BeneficioAcumulado[index]=(BeneficioMes[index]);
-            InversionAcum[index]=InversionMes[indice];
         }else{
             PorcRecuperado[index]=(BeneficioMes[index])/parseFloat(IntComp[1][1])+PorcRecuperado[index-1];
             BeneficioAcumulado[index]=(BeneficioMes[index])+BeneficioAcumulado[index-1];
-            InversionAcum[index]=(InversionMes[indice])+InversionAcum[index-1];
         }
      }
+    
+
      if (BeneficioMes[index]==0 & index>0){
         PorcRecuperado[index]=PorcRecuperado[index-1];
         BeneficioAcumulado[index]=BeneficioAcumulado[index-1];
      }
-     if (InversionMes[index]==0 & index>0){
-        InversionAcum[index]=InversionAcum[index-1];
-     }
-
+     
     }
 
-
-
-    console.log(PorcRecuperado);
     genera_tabla();
 }
 
 document.getElementById("FechaDeposito").addEventListener("change", function() {
     var input = this.value;
     var dateEntered = new Date(input);
-    console.log(input);
-    console.log(dateEntered);
-    //alert(input);
 });
 
 function EventOnload(){
@@ -190,7 +180,7 @@ function SumarDias(fecha, dias,depositoInicial,Seleccion){
 function genera_tabla(){
     for(let index in mesAño){
         let cuenta= parseInt(index)+1
-       console.log(mesAño[index]);
+       //console.log(mesAño[index]);
        addRow("table",mesAño[index],InversionMes[index],BeneficioMes[index],InvVencidasMes[index],cuenta,PorcRecuperado[index],BeneficioAcumulado[index],InversionAcum[index]);
     }
   
@@ -220,7 +210,7 @@ function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecu
     var BeneficioAcumuladString = myNumeral4.format('$0,0.00');
 
     var number5 = InversionAcuml;
-    var myNumeral5 = numeral (number4);
+    var myNumeral5 = numeral (number5);
     var InversionAcumlString = myNumeral5.format('$0,0.00');
 
     // Obtiene una referencia a la tabla
@@ -233,11 +223,12 @@ function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecu
 
     var newCellmes  = newRow.insertCell(0);
     var newCellInverAcuml  = newRow.insertCell(1);
-    //var newCellInver  = newRow.insertCell(1);
+    
     //var newCellBeneficio  = newRow.insertCell(2);
     //var newCellInverVenc  = newRow.insertCell(3);
     var newCellPorc  = newRow.insertCell(2);
     var newCellBenefAcum  = newRow.insertCell(3);
+    //var newCellInver  = newRow.insertCell(4);
    
     
     
@@ -261,9 +252,6 @@ function addRow(tableID,mes,inversiones,beneficios,inverVencidas,indice,PorcRecu
   
   function eliminar_tabla(){
       var tabla=document.getElementById("table");
-      //tabla.parentNode.removeChild(tabla);
-      //alert(tabla.rows.length)
-      
       for (var i=1; i=tabla.rows.length-1; i++) {
         document.getElementById("table").deleteRow(i);
         myChart.destroy();
@@ -320,7 +308,15 @@ if(i==2){
     FechaInicio=FechaPost;
     IntComp[i]=[i,BeneficioInvertido, InversionActual, InversVencida,Retiro,RetiroAcum,BeneficioAcum, FechaInicio, Reinversion,mesEscrito + " " + año];
     Principal[i]={MesAno:IntComp[i][9],Inversion:BeneficioInvertido,Beneficio:Retiro,InversionesVencidas:InversVencida};
-
+     
+    if (IntComp[i][9]!=IntComp[i-1][9]){
+        //console.log(IntComp[i-1][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
+    if (i==DiasDeCalculo-1){
+        //console.log(IntComp[i][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
 
 //Reinversion sin retiro DIA 2______________________________________________________________________ 
 }
@@ -347,6 +343,15 @@ if(i>=3 & i<=135){
     FechaInicio=FechaPost;
     IntComp[i]=[i,BeneficioInvertido, InversionActual, InversVencida,Retiro,RetiroAcum,BeneficioAcum, FechaInicio, Reinversion,mesEscrito + " " + año];
     Principal[i]={MesAno:IntComp[i][9],Inversion:BeneficioInvertido,Beneficio:Retiro,InversionesVencidas:InversVencida};
+    
+    if (IntComp[i][9]!=IntComp[i-1][9]){
+       // console.log(IntComp[i-1][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
+    if (i==DiasDeCalculo-1){
+        //console.log(IntComp[i][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
     //Reinversion sin retiro DIA 3 HASTA 134______________________________________________________________________ 
 }
 //_________________________________________________________________________________________________________
@@ -373,6 +378,15 @@ if(i==136 & DiasDeReinversion>=136){
     FechaInicio=FechaPost;
     IntComp[i]=[i,BeneficioInvertido, InversionActual, InversVencida,Retiro,RetiroAcum,BeneficioAcum,FechaInicio,Reinversion,mesEscrito + " " + año];
     Principal[i]={MesAno:IntComp[i][9],Inversion:BeneficioInvertido,Beneficio:Retiro,InversionesVencidas:InversVencida};
+    
+    if (IntComp[i][9]!=IntComp[i-1][9]){
+        //console.log(IntComp[i-1][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
+    if (i==DiasDeCalculo-1){
+        //console.log(IntComp[i][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
     //Reinversion sin retiro DIA 135______________________________________________________________________________ 
 }
 //____________________________________________________________________________________________________________
@@ -399,6 +413,15 @@ if(i>136 & DiasDeReinversion>=136){
     FechaInicio=FechaPost;
     IntComp[i]=[i,BeneficioInvertido, InversionActual, InversVencida,Retiro,RetiroAcum,BeneficioAcum,FechaInicio, Reinversion,mesEscrito + " " + año];
     Principal[i]={MesAno:IntComp[i][9],Inversion:BeneficioInvertido,Beneficio:Retiro,InversionesVencidas:InversVencida};
+    
+    if (IntComp[i][9]!=IntComp[i-1][9]){
+        //console.log(IntComp[i-1][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
+    if (i==DiasDeCalculo-1){
+        //console.log(IntComp[i][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
     //Reinversion sin retiro DIA 136 en adelante____________________________________________________________________________ 
 }
 //______________________________________________________________________________________________________________________
@@ -411,6 +434,14 @@ if(i>DiasDeReinversion || DiasDeReinversion==0){
             InversionActual= parseFloat(CapitalInic);
             IntComp[i]=[i,BeneficioInvertido, InversionActual, InversVencida,Retiro,RetiroAcum,BeneficioAcum, FechaInicio, Reinversion,mesEscrito + " " + año];
             Principal[i]={MesAno:IntComp[i][9],Inversion:BeneficioInvertido,Beneficio:Retiro,InversionesVencidas:InversVencida};
+            if (IntComp[i][9]!=IntComp[i-1][9]){
+                //console.log(IntComp[i-1][9])
+                InversionAcum.push(IntComp[i-1][2]);
+            }
+            if (i==DiasDeCalculo){
+                //console.log(IntComp[i][9]);
+                InversionAcum.push(IntComp[i-1][2]);
+            }
         }  
 //_____________________________________________________________________________________________________________________________________________________
         if(i>135){
@@ -459,6 +490,15 @@ if(i>DiasDeReinversion || DiasDeReinversion==0){
     IntComp[i]=[i,BeneficioInvertido, InversionActual, InversVencida,Retiro,RetiroAcum,BeneficioAcum,FechaInicio, Reinversion,mesEscrito + " " + año];
     tamaño=i;
     Principal[i]={MesAno:IntComp[i][9],Inversion:BeneficioInvertido,Beneficio:Retiro,InversionesVencidas:InversVencida};
+    if (IntComp[i][9]!=IntComp[i-1][9]){
+        //console.log(IntComp[i-1][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
+    if (i==DiasDeCalculo-1){
+        //console.log(IntComp[i][9])
+        InversionAcum.push(IntComp[i-1][2]);
+    }
+
 }
 //_____________________________________________________________________________________________________________________________________________________
          //Logger.log(IntComp[i]);
