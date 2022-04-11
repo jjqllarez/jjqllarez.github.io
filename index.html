@@ -6,15 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="styles.css" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Calculadora MyEasyTronBot</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
   </head>
-  <body onload="EventOnload()">
-      <div class="container">
-        <h1 class="mb-3 mt-3">Calculadora MyEasyTronBot</h1>
-        <form id="Formulario">
+  <body onload="EventOnload()" style="background-color: #000417; color: antiquewhite; font-size:small">
+      <div class="container mt-3">
+        <h1 class="mb-6 mt-6">Calculadora MyEasyTronBot</h1>
+        <br>
+        <form id="Formulario" style="font-size:x-large">
             <div class="mb-3 mt-2">
                 <label class="form-label" for="FechaDeposito"> Fecha Deposito Inicial: </label>
                 <input class="form-control" type="date" name="" id="FechaDeposito">
@@ -30,13 +32,13 @@
             </div>   
            
             <div class="d-grid gap-2">
-                <button class="btn btn-dark mt-3" type="button" id="calcular" >Calcular</button>
+                <button class="btn btn-primary mt-3" type="button" id="calcular" style="font-size:x-large">Calcular</button>
                 <!--<button class="btn btn-dark mt-3" type="button" id="CrearReporte" onclick="genera_tabla()">Generar Tabla</button>-->
                 <!--<button class="btn btn-dark mt-3" type="button" id="EliminarTabla" onclick="eliminar_tabla()">Eliminar Tabla</button>-->
             </div>
       </form>
-
-          <table class="table mt-3" id="table">
+<br>
+          <table class="table mt-3" id="table" style="color: antiquewhite; font-size: large;">
             <thead>
               <tr>
                 <th scope="col">Periodo</th>
